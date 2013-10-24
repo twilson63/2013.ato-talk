@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Building Enterprise Applications with AngularJS</title>
+
+    <meta name="description" content="Stakeholders are demanding richer interfaces and more real-time experiences, I will provide a tutorial on how to build enterprise applications using AngularJS, we will cover a quick overview of the framework, some core concepts, like data-binding, dependency injection, but really dig into the directives and the power of modules. During the course of the tutorial we will walk through the steps of building an enterprise document store application that enables users to share documents based on security groups of users and when users log in depending on the groups they are associated with, they can access the available files and folders. 
+
+    The point of the demo is not to complete a full enterprise app in 1:45 minutes, but to show how AngularJS can be a viable framework for building and maintaining enterprise applications.">
+    <meta name="author" content="Tom Wilson">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/simple.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/vs.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h1>Building Enterprise Applications</h1>
+          <h3>with AngularJS</h3>
+          <p>
+            <small>Created by <a href="http://github.com/twilson63">Tom Wilson</a> / <a href="http://twitter.com/twilson63">@twilson63</a></small>
+          </p>
+        </section>
+        <section>
+          <p>WHOAMI</p>
+          <img src="http://twilson63.jpg.to">
+          <h3>Tom Wilson</h3>
+          <p>President of Jack Russell Software, a Division of CareKinesis</p>
+          <p><em>Technology Vision, Software Architecture, Developer Training</em></p>
+          <p>Head Instructor for CHS CodeCamp - <a href="http://chscodecamp.com">http://chscodecamp.com</a></p>
+          <p><em>Teach: AngularJS, NodeJS, CouchDb, and DevTools</em></p>
+          <p>CoderDojo CHS <a href="http://coderdojochs.github.io/">http://coderdojochs.github.io/</a></p>
+          <p><em>Champion - NodeCopter Pilot Instructor</em></p>
+          <p><a href="https://github.com/twilson63">https://github.com/twilson63</a>
+          | <a href="http://twitter.com/twilson63">@twilson63</a></p>
+        </section>
+        <section>
+          <h3>Agenda</h3>
+          <ul>
+            <li>Our Problem</li>
+            <li>What is AngularJS?</li>
+            <li></li>
+            <li></li>
+            <li>Directives</li>
+            <li></li>
+            <li>Conclusion</li>
+          </ul>
+        </section>
+        <section>
+          <section>
+            <h2>Our Problem</h2>
+          </section>
+          <section>
+            <p>Our clients continued to ask/demand for richer user
+              experiences.</p>
+          </section>
+          <section>
+            <p>JQuery event model was becoming unmaintainable.</p>
+          </section>
+          <section>
+            <p>We needed to test our JavaScript in a sane efficient way.</p>
+          </section>
+          <section>
+            <p>We wanted a JavaScript Framework that would be fun and productive.</p>
+          </section>
+        </section>
+        <section>
+          <section>
+            <img height="300" src="img/square.png"></img>
+            <h1>What is AngularJS?</h1>
+          </section>
+          <section>
+            <p>AngularJS is built around the belief that declarative programming should be used for building UIs and wiring software components, while imperative programming is excellent for expressing business logic. The framework adapts and extends traditional HTML to better serve dynamic content through two-way data-binding that allows for the automatic synchronization of models and views. As a result, AngularJS deemphasizes DOM manipulation and improves testability.</p>
+            <a href="http://en.wikipedia.org/wiki/Angular_JS">hhttp://en.wikipedia.org/wiki/Angular_JS</a>
+          </section>
+          <section>
+            <h3>Hello World AngularJS App</h3>
+            <div data-height="408" data-theme-id="0" data-slug-hash="gLbos" data-user="twilson63" data-default-tab="html" class='codepen'><pre><code>&lt;!doctype html&gt;
+            &lt;html ng-app&gt;
+              &lt;head&gt;
+                &lt;script src=&quot;http:&#x2F;&#x2F;code.angularjs.org&#x2F;1.2.0-rc.2&#x2F;angular.min.js&quot;&gt;&lt;&#x2F;script&gt;
+              &lt;&#x2F;head&gt;
+              &lt;body&gt;
+                &lt;p ng-init=&quot; name=&#x27;World&#x27; &quot;&gt;Hello {{name}}!&lt;&#x2F;p&gt;
+              &lt;&#x2F;body&gt;
+            &lt;&#x2F;html&gt;</code></pre>
+            <p>See the Pen <a href='http://codepen.io/twilson63/pen/gLbos'>%= penName %></a> by Tom Wilson (<a href='http://codepen.io/twilson63'>@twilson63</a>) on <a href='http://codepen.io'>CodePen</a></p>
+            </div><script async src="//codepen.io/assets/embed/ei.js"></script>
+          </section>
+          <section>
+            <h2>Two-Way Data Binding</h2>
+            <div data-height="449" data-theme-id="0" data-slug-hash="whglE" data-user="twilson63" data-default-tab="html" class='codepen'><pre><code>
+            &lt;html ng-app&gt;
+              &lt;head&gt;
+                &lt;script src=&quot;http:&#x2F;&#x2F;code.angularjs.org&#x2F;1.2.0-rc.2&#x2F;angular.min.js&quot;&gt;&lt;&#x2F;script&gt;
+              &lt;&#x2F;head&gt;
+              &lt;body&gt;
+                &lt;input ng-model=&quot;name&quot;&gt;
+                &lt;p&gt;Hello {{name}}!&lt;&#x2F;p&gt;
+              &lt;&#x2F;body&gt;
+            &lt;&#x2F;html&gt;</code></pre>
+            <p>See the Pen <a href='http://codepen.io/twilson63/pen/whglE'>%= penName %></a> by Tom Wilson (<a href='http://codepen.io/twilson63'>@twilson63</a>) on <a href='http://codepen.io'>CodePen</a></p>
+            </div><script async src="//codepen.io/assets/embed/ei.js"></script>
+          </section>
+          <section>
+            <h2>Dependency Injection</h2>
+            <p>Dependency Injection (DI) is a software design pattern that deals with how code gets hold of its dependencies.</p>
+            <pre><code class="javascript">
+              angular.module('app')
+                .controller('MainCtrl', function($scope, $http, $location) {
+                  ...
+                });
+            </code></pre>
+          </section>
+          <section>
+            <div data-height="268" data-theme-id="0" data-slug-hash="cvlBd" data-user="twilson63" data-default-tab="js" class='codepen'><pre><code>angular.module(&#x27;App&#x27;, [])
+              .controller(&#x27;HomeCtrl&#x27;, function($window) {
+                $window.document.write(&#x27;Hello World&#x27;);
+            });
+            </code></pre>
+            <p>See the Pen <a href='http://codepen.io/twilson63/pen/cvlBd'>%= penName %></a> by Tom Wilson (<a href='http://codepen.io/twilson63'>@twilson63</a>) on <a href='http://codepen.io'>CodePen</a></p>
+            </div><script async src="//codepen.io/assets/embed/ei.js"></script>
+          </section>
+          <section>
+            <h2>Scope</h2>
+            <img height=500 src="img/concepts-scope.png" />
+            <a href="http://docs.angularjs.org/guide">http://docs.angularjs.org/guide</a>
+          </section>
+          <section>
+            <h3>Scope is the Glue</h3>
+            <img height=500 src="img/concepts-controller.png" />
+            <a href="http://docs.angularjs.org/guide">http://docs.angularjs.org/guide</a>
+          </section>
+          <section>
+            <h2>Services</h2>
+            <div data-height="585" data-theme-id="0" data-slug-hash="LwKft" data-user="twilson63" data-default-tab="js" class='codepen'><pre><code>              angular.module(&#x27;myModule&#x27;, [])
+                            .factory(&#x27;notify&#x27;, function($window) {
+                              var msgs = [];
+                              return function(msg) {
+                                msgs.push(msg);
+                                if (msgs.length == 3) {
+                                  $window.alert(msgs.join(&quot;\n&quot;));
+                                  msgs = [];
+                                }
+                              };
+                            }]);
+                            .controller(&#x27;MainCtrl&#x27;, function($scope, notify) {
+                              notify(&#x27;Hello&#x27;);
+                              notify(&#x27;World&#x27;);
+                              notify(&#x27;GoodBye&#x27;);
+                            });
+                          });</code></pre>
+            <p>See the Pen <a href='http://codepen.io/twilson63/pen/LwKft'>%= penName %></a> by Tom Wilson (<a href='http://codepen.io/twilson63'>@twilson63</a>) on <a href='http://codepen.io'>CodePen</a></p>
+            </div><script async src="//codepen.io/assets/embed/ei.js"></script>
+            <p>Services are Singletons</p>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Directives</h2>
+          </section>
+          <section>
+            <h2>Built-In</h2>
+            <ul>
+              <li>ngRepeat</li>
+              <li>ngClick</li>
+              <li>...</li>
+            </ul>
+            
+          </section>
+          <section>
+            <p>ngRepeat</p>
+            <div data-height="468" data-theme-id="0" data-slug-hash="uHqxL" data-user="twilson63" data-default-tab="html" class='codepen'><pre><code>&lt;html ng-app&gt;
+              &lt;head&gt;&lt;title&gt;HelloWorld&lt;&#x2F;title&gt;&lt;&#x2F;head&gt;
+              &lt;body&gt;
+                &lt;div ng-init=&quot; items=[1,2,3,4] &quot;&gt;&lt;&#x2F;div&gt;
+                &lt;ul&gt;
+                  &lt;li ng-repeat=&quot;item in items&quot;&gt;
+                    {{item}}
+                  &lt;&#x2F;li&gt;
+                &lt;script src=&quot;http:&#x2F;&#x2F;code.angularjs.org&#x2F;1.2.0-rc.2&#x2F;angular.min.js&quot;&gt;&lt;&#x2F;script&gt;
+              &lt;&#x2F;body&gt;
+            &lt;&#x2F;html&gt;</code></pre>
+            <p>See the Pen <a href='http://codepen.io/twilson63/pen/uHqxL'>%= penName %></a> by Tom Wilson (<a href='http://codepen.io/twilson63'>@twilson63</a>) on <a href='http://codepen.io'>CodePen</a></p>
+            </div><script async src="//codepen.io/assets/embed/ei.js"></script>
+          </section>
+          <section>
+            <p>ngClick</p>
+            <div data-height="268" data-theme-id="0" data-slug-hash="HmoKD" data-user="twilson63" data-default-tab="html" class='codepen'><pre><code>&lt;html ng-app&gt;
+              &lt;head&gt;&lt;title&gt;HelloWorld&lt;&#x2F;title&gt;&lt;&#x2F;head&gt;
+              &lt;body&gt;
+                &lt;div ng-controller=&quot;Main&quot;&gt;
+                &lt;div ng-init=&quot; items=[1,2,3,4] &quot;&gt;&lt;&#x2F;div&gt;
+
+                &lt;button ng-click=&quot;alert()&quot;&gt;Click&lt;&#x2F;button&gt;
+                &lt;&#x2F;div&gt;
+                &lt;script src=&quot;http:&#x2F;&#x2F;code.angularjs.org&#x2F;1.2.0-rc.2&#x2F;angular.min.js&quot;&gt;&lt;&#x2F;script&gt;
+              &lt;&#x2F;body&gt;
+            &lt;&#x2F;html&gt;</code></pre>
+            <p>See the Pen <a href='http://codepen.io/twilson63/pen/HmoKD'>%= penName %></a> by Tom Wilson (<a href='http://codepen.io/twilson63'>@twilson63</a>) on <a href='http://codepen.io'>CodePen</a></p>
+            </div><script async src="//codepen.io/assets/embed/ei.js"></script>
+          </section>
+          <section>
+            <p>Understanding the Directive</p>
+            <div data-height="568" data-theme-id="0" data-slug-hash="qrfmE" data-user="twilson63" data-default-tab="js" class='codepen'><pre><code>angular.module(&#x27;app&#x27;)
+            .directive(&#x27;myDirective&#x27;, function() {
+              return {
+                restrict: &#x27;EAC&#x27;,
+                scope: true,
+                transclude: false,
+                replace: true,
+                compile: ...
+                link: ...
+                templateUrl: ...
+                controller: ...
+              }
+            });</code></pre>
+            <p>See the Pen <a href='http://codepen.io/twilson63/pen/qrfmE'>%= penName %></a> by Tom Wilson (<a href='http://codepen.io/twilson63'>@twilson63</a>) on <a href='http://codepen.io'>CodePen</a></p>
+            </div><script async src="//codepen.io/assets/embed/ei.js"></script>
+          </section>
+          <section>
+            <p>Build your own</p>
+            <div data-height="568" data-theme-id="0" data-slug-hash="uiHaK" data-user="twilson63" data-default-tab="js" class='codepen'><pre><code>angular.module(&#x27;directive&#x27;, []).directive(&#x27;contenteditable&#x27;, function() {
+              return {
+                require: &#x27;ngModel&#x27;,
+                link: function(scope, elm, attrs, ctrl) {
+                  &#x2F;&#x2F; view -&gt; model
+                  elm.on(&#x27;blur&#x27;, function() {
+                    scope.$apply(function() {
+                      ctrl.$setViewValue(elm.html());
+                    });
+                  });
+
+                  &#x2F;&#x2F; model -&gt; view
+                  ctrl.$render = function(value) {
+                    elm.html(value);
+                  };
+
+                  &#x2F;&#x2F; load init value from DOM
+                  ctrl.$setViewValue(elm.html());
+                }
+              };
+            });</code></pre>
+            <p>See the Pen <a href='http://codepen.io/twilson63/pen/uiHaK'>%= penName %></a> by Tom Wilson (<a href='http://codepen.io/twilson63'>@twilson63</a>) on <a href='http://codepen.io'>CodePen</a></p>
+            </div><script async src="//codepen.io/assets/embed/ei.js"></script>
+          </section>
+          <section>
+
+          </section>
+          <section>
+            <h2>The bootstrap does not have to be on the html tag.</h2>
+          </section>
+          <section>
+            <pre><code>
+              &lt;section ng-app=&quot;MyApp&quot;&gt;
+              &lt;/section&gt;
+              &lt;script src=&quot;angular.js&quot;&gt;&lt;/script&gt;
+            </code></pre>
+          </section>
+          <section>
+            <h2>Multiple Apps can exist on the same page.</h2>
+          </section>
+          <section>
+            <pre><code>
+              &lt;section id=&quot;helloworld&quot; ng-controller=&quot;HelloWorldController&quot;&gt;
+                Hello {{name}}!
+              &lt;/section&gt; 
+              &lt;br /&gt;
+              &lt;section id=&quot;myapp&quot; ng-controller=&quot;MyNameIsController&quot;&gt;
+                My Name is {{FirstName}} {{LastName}}!
+              &lt;/section&gt;
+              &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+              &lt;script src=&quot;app.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+              &lt;script type=&quot;text/javascript&quot;&gt;
+                    angular.bootstrap(document.getElementById(&#x27;helloworld&#x27;), [&#x27;HelloWorldApp&#x27;]);
+                    angular.bootstrap(document.getElementById(&#x27;myapp&#x27;), [&#x27;MyNameIsApp&#x27;]);
+              &lt;/script&gt;
+            </code></pre>
+          </section>
+          <section>
+            <h2>But it is often not necessary using modules and directives.</h2>
+          </section>
+          <section>
+            <h2>Why? JQuery Rocks!</h2>
+            <p>Separation of Presentation and Logic</p>
+          </section>
+          <section>
+            <h2>Increase in Productivity</h2>
+            <p>Building and sharing Directives and Filters</p>
+          </section>
+          <section>
+            <h2>Better Test Coverage</h2>
+            <p>Todo Test Example</p>
+          </section>
+          <section>
+            <h2>Conclusion</h2>
+            <p>AngularJS is a great JavaScript framework choice for Brownfield applications.</p>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Greenfield</h2>
+            <p>In many disciplines a greenfield is a project that lacks any constraints imposed by prior work. The analogy is to that of construction on greenfield land where there is no need to remodel or demolish an existing structure.</p>
+            <a href="http://en.wikipedia.org/wiki/Greenfield_project">http://en.wikipedia.org/wiki/Greenfield_project</a>
+          </section>
+          <section>
+            <h2>Project Organization</h2>
+            <p>Use Best Practices</p>
+          </section>
+          <section>
+            <h2>For Example: NodeJS</h2>
+            <pre><code>
+              - application
+                - api
+                  ....
+                - app
+                  - controllers
+                  - directives
+                  - filters
+                  - templates
+                - public
+                  - index.html
+                  - js
+                  - components
+                - test
+                  ...
+            </code></pre>
+          </section>
+          <section>
+            <h2>Grunt</h2>
+            <h2>Bower</h2>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Directives</h2>
+            <pre><code>
+              
+            </code></pre>
+          </section>
+          <section>
+            
+          </section>
+        </section>
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
